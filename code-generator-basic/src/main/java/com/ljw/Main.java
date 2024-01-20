@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws TemplateException, IOException {
-        args = new String[]{"generate","-l","-a","-o"};
+//        args = new String[]{"generate","-l","-a","-o"};
 //        args = new String[]{"list"};
 //        args = new String[]{"config"};
         // 命令行
