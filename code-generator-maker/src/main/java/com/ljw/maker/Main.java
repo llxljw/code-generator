@@ -1,7 +1,7 @@
-package com.ljw;
+package com.ljw.maker;
 
 import freemarker.template.TemplateException;
-import com.ljw.cli.CommandExecutor;
+import com.ljw.maker.cli.CommandExecutor;
 import java.io.IOException;
 
 /**

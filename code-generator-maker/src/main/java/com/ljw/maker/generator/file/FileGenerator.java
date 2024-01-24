@@ -1,7 +1,8 @@
-package com.ljw.generator;
+package com.ljw.maker.generator.file;
 
+import com.ljw.maker.generator.file.DynamicFileGenerator;
 import freemarker.template.TemplateException;
-import com.ljw.model.MainTemplateConfig;
+import com.ljw.maker.model.DataModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.io.IOException;
  * @Date: 2024/01/16/11:27
  * @Description: 动态，静态文件生成
  */
-public class MainGenerator {
+public class FileGenerator {
     public static void doGenerate(Object model) throws TemplateException, IOException {
         String projectPath = System.getProperty("user.dir");
         // 整个项目的根路径
@@ -22,10 +23,10 @@ public class MainGenerator {
         String inputPath = new File(parentFile, "code-generator-demo-projects/acm-template").getAbsolutePath();
         String outputPath = projectPath;
         // 生成静态文件
-        StaticGenerator.copyFilesByRecursive(inputPath, outputPath);
+        StaticFileGenerator.copyFilesByHutool(inputPath, outputPath);
         // 生成动态文件
         String inputDynamicFilePath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
         String outputDynamicFilePath = outputPath + File.separator + "acm-template/src/com/ljw/acm/MainTemplate.java";
-        DynamicGenerator.doGenerate(inputDynamicFilePath, outputDynamicFilePath, model);
+        DynamicFileGenerator.doGenerate(inputDynamicFilePath, outputDynamicFilePath, model);
     }
 }

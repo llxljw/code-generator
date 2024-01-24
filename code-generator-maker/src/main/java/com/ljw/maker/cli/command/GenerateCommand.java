@@ -1,9 +1,9 @@
-package com.ljw.cli.command;
+package com.ljw.maker.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
-import com.ljw.generator.MainGenerator;
-import com.ljw.model.MainTemplateConfig;
+import com.ljw.maker.generator.file.FileGenerator;
+import com.ljw.maker.model.DataModel;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import java.util.concurrent.Callable;
@@ -27,10 +27,10 @@ public class GenerateCommand implements Callable<Integer> {
     String outputText = "Hello world";
     @Override
     public Integer call() throws Exception {
-        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
+        DataModel mainTemplateConfig = new DataModel();
         BeanUtil.copyProperties(this,mainTemplateConfig);
         System.out.println("数据模型为:"+mainTemplateConfig);
-        MainGenerator.doGenerate(mainTemplateConfig);
+        FileGenerator.doGenerate(mainTemplateConfig);
         return 0;
     }
 }
