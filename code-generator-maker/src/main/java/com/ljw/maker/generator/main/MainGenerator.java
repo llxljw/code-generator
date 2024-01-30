@@ -7,7 +7,6 @@ import com.ljw.maker.generator.file.DynamicFileGenerator;
 import com.ljw.maker.meta.Meta;
 import com.ljw.maker.meta.MetaManager;
 import freemarker.template.TemplateException;
-import freemarker.template.utility.StringUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +45,49 @@ public class MainGenerator {
         // model.DataModel
         inputFilePath = inputResourcePath + File.separator + "templates/java/model/DataModel.java.ftl";
         outputFilePath = outputBaseJavaPackagePath + "/model";
-        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath, meta);
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath + File.separator +"DataModel.java", meta);
+
+        // cli.command.ConfigCommand
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/ConfigCommand.java.ftl";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/command/";
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath+"ConfigCommand.java", meta);
+
+        // cli.command.GenerateCommand
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/GenerateCommand.java.ftl";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/command/";
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath+"GenerateCommand.java", meta);
+
+        // cli.command.ListCommand
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/ListCommand.java.ftl";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/command/";
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath+"ListCommand.java", meta);
+
+        // cli.CommandExecutor
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/CommandExecutor.java.ftl";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/";
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath+"CommandExecutor.java", meta);
+
+        // Main
+        inputFilePath = inputResourcePath + File.separator + "templates/java/Main.java.ftl";
+        outputFilePath = outputBaseJavaPackagePath;
+        if (!FileUtil.exist(outputFilePath)){
+            FileUtil.mkdir(outputFilePath);
+        }
+        DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath+"/Main.java", meta);
     }
 }

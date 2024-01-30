@@ -8,7 +8,7 @@ import cn.hutool.json.JSONUtil;
  *
  * @Auther: ljw
  * @Date: 2024/01/20/22:16
- * @Description: 双检索生成单例的元信息实体
+ * @Description: 双检锁生成单例的元信息实体
  */
 public class MetaManager {
     private static volatile Meta meta;

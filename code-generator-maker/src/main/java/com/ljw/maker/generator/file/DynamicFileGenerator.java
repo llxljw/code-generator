@@ -32,10 +32,8 @@ public class DynamicFileGenerator {
 
         String templateName = new File(inputPath).getName();
         Template template = configuration.getTemplate(templateName,"utf-8");
-        if (!FileUtil.exist(outputPath)){
-            FileUtil.mkdir(outputPath);
-        }
-        Writer out = new OutputStreamWriter(Files.newOutputStream(Paths.get(outputPath + File.separator +"DataModel.java")), StandardCharsets.UTF_8);
+
+        Writer out = new OutputStreamWriter(Files.newOutputStream(Paths.get(outputPath)), StandardCharsets.UTF_8);
 //        Writer out = new FileWriter(outputPath);
         template.process(model, out);
         out.close();
