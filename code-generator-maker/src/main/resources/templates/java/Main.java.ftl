@@ -1,6 +1,6 @@
-package ${basePackage}.maker;
+package ${basePackage};
 
-import ${basePackage}.maker.cli.CommandExecutor;
+import ${basePackage}.cli.CommandExecutor;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;

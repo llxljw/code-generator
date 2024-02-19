@@ -18,7 +18,7 @@ public class DataModel {
     /**
      * 作者
      */
-    private String anther = "ljw";
+    private String author = "ljw";
     /**
      * 输出信息
      */

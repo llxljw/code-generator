@@ -1,4 +1,4 @@
-package com.ljw.maker.generator.file;
+package ${basePackage}.generator;
 
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
@@ -11,13 +11,18 @@ import java.nio.file.Paths;
 
 
 /**
- * Created with IntelliJ IDEA.
- *
- * @Auther: ljw
- * @Date: 2024/01/16/11:18
  * @Description: 动态文件生成
  */
-public class DynamicFileGenerator {
+public class DynamicGenerator {
+    /**
+     * 生成文件
+     *
+     * @param inputPath 模板文件输入路径
+     * @param outputPath 输出路径
+     * @param model 数据模型
+     * @throws IOException
+     * @throws TemplateException
+     */
     public static void doGenerate(String inputPath, String outputPath, Object model) throws IOException, TemplateException {
         // new 出 Configuration 对象，参数为 FreeMarker 版本号
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_32);
@@ -30,6 +35,7 @@ public class DynamicFileGenerator {
 
         String templateName = new File(inputPath).getName();
         Template template = configuration.getTemplate(templateName,"utf-8");
+        // 文件不存在则创建文件和父目录
         if (!FileUtil.exist(outputPath)) {
             FileUtil.touch(outputPath);
         }

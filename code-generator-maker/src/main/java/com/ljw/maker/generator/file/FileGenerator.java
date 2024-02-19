@@ -1,8 +1,6 @@
 package com.ljw.maker.generator.file;
 
-import com.ljw.maker.generator.file.DynamicFileGenerator;
 import freemarker.template.TemplateException;
-import com.ljw.maker.model.DataModel;
 
 import java.io.File;
 import java.io.IOException;

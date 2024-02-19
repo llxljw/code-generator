@@ -4,7 +4,7 @@ import java.util.Scanner;
 /**
 * ACM 输入模板（多数之和）
 * Created with IntelliJ IDEA.
-* @Auther: ${anther}
+* @Author: ${author}
 */
 public class MainTemplate {
 public static void main(String[] args) {

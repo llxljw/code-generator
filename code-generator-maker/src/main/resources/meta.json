@@ -6,12 +6,12 @@
   "author": "ljw",
   "createTime": "2024-1-20",
   "fileConfig": {
-    "inputRootPath": "code-generator/code-generator-demo-projects/acm-template-pro",
+    "inputRootPath": "D:/code-generator/code-generator-demo-projects/acm-template-pro",
     "outputRootPath": "generated",
     "type": "dir",
     "fileInfo": [
       {
-        "inputPath": "src/com/liw/acm/MainTemplate.java.ftl",
+        "inputPath": "src/com/ljw/acm/MainTemplate.java.ftl",
         "outputPath": "src/com/ljw/acm/MainTemplate.java",
         "type": "file",
         "generateType": "dynamic"
