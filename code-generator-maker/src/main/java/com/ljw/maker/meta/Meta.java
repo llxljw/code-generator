@@ -26,6 +26,7 @@ public class Meta {
     @Data
     public static class FileConfig {
         private String inputRootPath;
+        private String sourceRootPath;
         private String outputRootPath;
         private String type;
         private List<FileInfo> fileInfo;
