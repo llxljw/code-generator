@@ -12,6 +12,7 @@ import com.ljw.maker.meta.enums.ModelTypeEnum;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: ljw
@@ -26,6 +27,7 @@ public class MetaValidator {
     }
 
     private static void metaModelConfigValid(Meta meta) {
+
         // modelConfig 校验和默认值
         Meta.ModelConfig modelConfig = meta.getModelConfig();
         if (modelConfig == null) {
@@ -36,6 +38,16 @@ public class MetaValidator {
             return;
         }
         for (Meta.ModelConfig.ModelInfo modelInfo : modelInfoList) {
+            // 为 group，不校验
+            String groupKey = modelInfo.getGroupKey();
+            if (StrUtil.isNotEmpty(groupKey)) {
+                List<Meta.ModelConfig.ModelInfo> subModelInfos = modelInfo.getModels();
+                String allArgsStr = subModelInfos.stream()
+                        .map(subModelInfo -> String.format("\"--%s\"",subModelInfo.getFieldName()))
+                        .collect(Collectors.joining(","));
+                modelInfo.setAllArgsStr(allArgsStr);
+                continue;
+            }
             // 字段名称不能为空
             String fieldName = modelInfo.getFieldName();
             if (StrUtil.isBlank(fieldName)) {
@@ -54,7 +66,7 @@ public class MetaValidator {
         if (fileConfig == null) {
             return;
         }
-        // 模版文件路径不能为空
+        // 模版文件根路径不能为空
         String sourceRootPath = fileConfig.getSourceRootPath();
         if (StrUtil.isBlank(sourceRootPath)) {
             throw new MetaException("未填写 sourceRootPath");
@@ -80,6 +92,11 @@ public class MetaValidator {
             return;
         }
         for (Meta.FileConfig.FileInfo fileInfo : fileInfoList) {
+            // 为分组时不需要校验
+            String groupType = fileInfo.getType();
+            if (groupType.equals(FileTypeEnum.GROUP.getValue())){
+                continue;
+            }
             // inputPath: 必填
             String inputPath = fileInfo.getInputPath();
             if (StrUtil.isBlank(inputPath)) {

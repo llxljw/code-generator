@@ -38,6 +38,10 @@ public class Meta {
             private String outputPath;
             private String type;
             private String generateType;
+            private String condition;
+            private String groupKey;
+            private String groupName;
+            private List<FileInfo> files;
         }
     }
 
@@ -54,6 +58,13 @@ public class Meta {
             private String description;
             private Object defaultValue;
             private String abbr;
+            private boolean needGit;
+            private String groupKey;
+            private String groupName;
+            private List<ModelConfig.ModelInfo> models;
+            private String condition;
+            //分组下的参数拼接
+            private String allArgsStr;
         }
     }
 }

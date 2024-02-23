@@ -7,10 +7,12 @@ package com.ljw.maker.meta.enums;
  */
 public enum FileTypeEnum {
     FILE("文件","file"),
-    DIR("目录","dir");
+    DIR("目录","dir"),
+    GROUP("分组","group");
 
     private String text;
     private String value;
+    private String group;
     FileTypeEnum(String text, String value) {
         this.text = text;
         this.value = value;

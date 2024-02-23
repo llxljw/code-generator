@@ -31,6 +31,7 @@ public abstract class GenerateTemplate {
 
         // 把模版文件复制过来
         String sourceCopyDestPath = copySourceFile(outputPath, meta);
+        // 生成数据模型，命令类等相关文件
         generateCodeFile(meta, outputPath);
         // 构建jar包
         String jarPath = buildJar(outputPath, meta);
@@ -132,10 +133,10 @@ public abstract class GenerateTemplate {
         outputFilePath = outputPath + "/pom.xml";
         DynamicFileGenerator.doGenerate(inputFilePath , outputFilePath, meta);
 
-        // README.md
-        inputFilePath = inputResourcePath + File.separator + "templates/README.md.ftl";
-        outputFilePath = outputPath + "/README.md";
-        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath, meta);
+//        // README.md
+//        inputFilePath = inputResourcePath + File.separator + "templates/README.md.ftl";
+//        outputFilePath = outputPath + "/README.md";
+//        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath, meta);
     }
 
     protected String copySourceFile(String outputPath, Meta meta) {
