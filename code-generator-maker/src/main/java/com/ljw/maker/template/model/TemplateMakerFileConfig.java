@@ -13,6 +13,17 @@ import java.util.List;
 @Data
 public class TemplateMakerFileConfig {
     List<FileInfoConfig> fileInfoConfigList;
+
+    /**
+     * 文件分组（一个TemplateMakerFileConfig下的所有文件为一组）
+     */
+    FileGroupConfig fileGroupConfig;
+    @Data
+    public static class FileGroupConfig{
+        private String condition;
+        private String groupKey;
+        private String groupName;
+    }
     @Data
     public static class FileInfoConfig{
         /**
