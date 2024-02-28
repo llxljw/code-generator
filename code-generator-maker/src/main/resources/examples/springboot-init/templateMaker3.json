@@ -1,0 +1,28 @@
+{
+ "id": 1,
+  "fileConfig": {
+    "fileInfoConfigList": [
+      {
+        "path": "src/main/java/com/yupi/springbootinit/config/CorsConfig.java",
+        "condition": "needCors"
+      }
+    ]
+  },
+  "modelConfig": {
+    "modelInfoConfigList": [
+      {
+        "fieldName": "needPost",
+        "type": "boolean",
+        "description": "post是否生成",
+        "defaultValue": true
+      },
+
+      {
+        "fieldName": "needCors",
+        "type": "boolean",
+        "description": "是否生成跨域配置",
+        "defaultValue": true
+      }
+    ]
+  }
+}

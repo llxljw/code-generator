@@ -6,11 +6,11 @@ package com.ljw.maker.template.enums;
  * @Description: 文件过滤范围枚举
  */
 public enum FileFilterRuleEnum {
-    CONTAINS("包含","fileName"),
-    EQUALS("相等","fileContent"),
-    STARTS_WITH("前缀匹配","fileContent"),
-    ENDS_WITH("后缀匹配","fileContent"),
-    REGEX("正则","fileContent");
+    CONTAINS("包含","contains"),
+    EQUALS("相等","equals"),
+    STARTS_WITH("前缀匹配","start_with"),
+    ENDS_WITH("后缀匹配","end_with"),
+    REGEX("正则","regex");
 
 
     private String text;

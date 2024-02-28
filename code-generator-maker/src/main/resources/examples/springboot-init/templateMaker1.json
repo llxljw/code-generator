@@ -1,0 +1,21 @@
+{
+ "id": 1,
+  "fileConfig": {
+    "fileInfoConfigList": [
+      {
+        "path": ""
+      }
+    ]
+  },
+  "modelConfig": {
+    "modelInfoConfigList": [
+      {
+        "fieldName": "basePackage",
+        "type": "String",
+        "description": "基础包名",
+        "defaultValue": "com.yupi",
+        "replaceText": "com.yupi"
+      }
+    ]
+  }
+}
