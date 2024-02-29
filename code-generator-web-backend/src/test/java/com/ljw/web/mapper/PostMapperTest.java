@@ -1,6 +1,6 @@
 package com.ljw.web.mapper;
 
-import com.ljw.web.model.entity.Post;
+import com.ljw.web.model.entity.Generator;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
@@ -15,14 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @SpringBootTest
-class PostMapperTest {
+class GeneratorMapperTest {
 
     @Resource
-    private PostMapper postMapper;
+    private GeneratorMapper generatorMapper;
 
     @Test
-    void listPostWithDelete() {
-        List<Post> postList = postMapper.listPostWithDelete(new Date());
-        Assertions.assertNotNull(postList);
+    void listGeneratorWithDelete() {
+        List<Generator> generatorList = generatorMapper.listGeneratorWithDelete(new Date());
+        Assertions.assertNotNull(generatorList);
     }
 }
