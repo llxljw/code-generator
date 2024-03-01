@@ -1,6 +1,8 @@
 package com.ljw.maker;
 
+import com.ljw.maker.generator.main.GenerateTemplate;
 import com.ljw.maker.generator.main.MainGenerator;
+import com.ljw.maker.generator.main.ZipGenerator;
 import com.ljw.maker.meta.enums.FileTypeEnum;
 import freemarker.template.TemplateException;
 
@@ -14,7 +16,8 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
-        MainGenerator mainGenerator = new MainGenerator();
-        mainGenerator.doGenerate();
+//        MainGenerator mainGenerator = new MainGenerator();
+        GenerateTemplate generateTemplate = new ZipGenerator();
+        generateTemplate.doGenerate();
     }
 }

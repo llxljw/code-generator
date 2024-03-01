@@ -3,6 +3,7 @@ package com.ljw.maker.generator.main;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.ljw.maker.generator.JarGenerator;
 import com.ljw.maker.generator.ScriptGenerator;
 import com.ljw.maker.generator.file.DynamicFileGenerator;
@@ -40,7 +41,13 @@ public abstract class GenerateTemplate {
         String shellOutputFilePath = buildScript(outputPath, jarPath);
 
         // 精简版代码生成器
-        buildDist(outputPath, jarPath, shellOutputFilePath, sourceCopyDestPath);
+        String buildDistPath = buildDist(outputPath, jarPath, shellOutputFilePath, sourceCopyDestPath);
+    }
+
+    protected static String buildZip(String buildDistPath) {
+        String zipDistPath = buildDistPath + ".zip";
+        ZipUtil.zip(buildDistPath,zipDistPath);
+        return zipDistPath;
     }
 
 
@@ -49,7 +56,7 @@ public abstract class GenerateTemplate {
         ScriptGenerator.doGenerate(shellOutputFilePath, jarPath);
         return shellOutputFilePath;
     }
-    protected void buildDist(String outputPath, String jarPath, String shellOutputFilePath, String sourceCopyDestPath) {
+    protected String buildDist(String outputPath, String jarPath, String shellOutputFilePath, String sourceCopyDestPath) {
         String distOutputFilePath = outputPath + "-dist";
         //复制jar包
         String targetAbsolutPath = distOutputFilePath + File.separator + "target";
@@ -61,6 +68,7 @@ public abstract class GenerateTemplate {
         FileUtil.copy(shellOutputFilePath +".bat",distOutputFilePath,true);
         // 复制原始模版文件
         FileUtil.copy(sourceCopyDestPath,distOutputFilePath,true);
+        return distOutputFilePath;
     }
 
     protected String buildJar(String outputPath,Meta meta) throws IOException, InterruptedException {
