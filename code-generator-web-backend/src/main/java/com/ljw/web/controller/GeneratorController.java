@@ -2,9 +2,13 @@ package com.ljw.web.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.io.IOException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.ljw.web.annotation.AuthCheck;
 import com.ljw.web.common.BaseResponse;
 import com.ljw.web.common.DeleteRequest;
@@ -13,6 +17,7 @@ import com.ljw.web.common.ResultUtils;
 import com.ljw.web.constant.UserConstant;
 import com.ljw.web.exception.BusinessException;
 import com.ljw.web.exception.ThrowUtils;
+import com.ljw.web.manager.CosManager;
 import com.ljw.web.meta.Meta;
 import com.ljw.web.model.dto.generator.GeneratorAddRequest;
 import com.ljw.web.model.dto.generator.GeneratorQueryRequest;
@@ -22,7 +27,10 @@ import com.ljw.web.model.entity.User;
 import com.ljw.web.model.vo.GeneratorVO;
 import com.ljw.web.service.GeneratorService;
 import com.ljw.web.service.UserService;
+import com.qcloud.cos.model.COSObject;
+import com.qcloud.cos.model.COSObjectInputStream;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import com.ljw.web.model.dto.generator.GeneratorEditRequest;
@@ -40,6 +48,9 @@ public class GeneratorController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CosManager cosManager;
 
     // region 增删改查
 
@@ -143,6 +154,45 @@ public class GeneratorController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(generatorService.getGeneratorVO(generator, request));
+    }
+
+
+    /**
+     * 根据 id 下载代码生成器
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/download")
+    public void downloadGeneratorById(long id, HttpServletResponse response,HttpServletRequest request) throws IOException {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Generator generator = generatorService.getById(id);
+        if (generator == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        String distPath = generator.getDistPath();
+        COSObjectInputStream cosObjectInput = null;
+        try {
+            COSObject cosObject = cosManager.getObject(distPath);
+            cosObjectInput = cosObject.getObjectContent();
+            // 处理下载到的流
+            byte[] bytes = IOUtils.toByteArray(cosObjectInput);
+            // 设置响应头
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment; filename=" + distPath);
+            // 写入响应
+            response.getOutputStream().write(bytes);
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            log.error("file download error, filepath = " + distPath, e);
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "下载失败");
+        } finally {
+            if (cosObjectInput != null) {
+                cosObjectInput.close();
+            }
+        }
     }
 
     /**

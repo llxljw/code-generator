@@ -4,7 +4,7 @@ spring:
     name: springboot-init
   # 默认 dev 环境
   profiles:
-    active: test
+    active: local
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -80,14 +80,7 @@ wx:
   open:
     appId: xxx
     appSecret: xxx
-# 对象存储
-# todo 需替换配置
-cos:
-  client:
-    accessKey: xxx
-    secretKey: xxx
-    region: xxx
-    bucket: xxx
+
 # 接口文档配置
 knife4j:
   enable: true

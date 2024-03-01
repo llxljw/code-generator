@@ -1,33 +1,37 @@
 package com.ljw.web.controller;
 
+
 import cn.hutool.core.io.FileUtil;
+import com.ljw.web.annotation.AuthCheck;
 import com.ljw.web.common.BaseResponse;
 import com.ljw.web.common.ErrorCode;
 import com.ljw.web.common.ResultUtils;
 import com.ljw.web.constant.FileConstant;
+import com.ljw.web.constant.UserConstant;
 import com.ljw.web.exception.BusinessException;
 import com.ljw.web.manager.CosManager;
 import com.ljw.web.model.dto.file.UploadFileRequest;
 import com.ljw.web.model.entity.User;
 import com.ljw.web.model.enums.FileUploadBizEnum;
 import com.ljw.web.service.UserService;
-import java.io.File;
-import java.util.Arrays;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import com.qcloud.cos.model.COSObject;
+import com.qcloud.cos.model.COSObjectInputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.poi.util.IOUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
 
 /**
  * 文件接口
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @RestController
 @RequestMapping("/file")
@@ -38,7 +42,63 @@ public class FileController {
     private UserService userService;
 
     @Resource
-    private CosManager cosManager;
+    CosManager cosManager;
+    /**
+     * 测试文件上传
+     */
+    @PostMapping("/test/upload")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<String> testFileUpload(@RequestPart("file")MultipartFile multipartFile) {
+        String filename = multipartFile.getOriginalFilename();
+        String filePath = String.format("/test/%s", filename);
+        File file = null;
+        try {
+            file = File.createTempFile(filePath, null);
+            multipartFile.transferTo(file);
+            cosManager.putObject(filePath, file);
+            return ResultUtils.success(filePath);
+        } catch (IOException e) {
+            log.error("file upload error, filepath = " + filePath, e);
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
+        } finally {
+            if (file != null) {
+                // 删除临时文件
+                boolean delete = file.delete();
+                if (!delete) {
+                    log.error("file delete error, filepath = {}", filePath);
+                }
+            }
+
+        }
+    }
+
+    /**
+     * 测试文件下载
+     */
+    @GetMapping("/test/download")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public void testFileDownload(String filepath, HttpServletResponse response) throws IOException {
+        COSObjectInputStream cosObjectInput = null;
+        try {
+            COSObject cosObject = cosManager.getObject(filepath);
+            cosObjectInput = cosObject.getObjectContent();
+            // 处理下载到的流
+            byte[] bytes = IOUtils.toByteArray(cosObjectInput);
+            // 设置响应头
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment; filename=" + filepath);
+            // 写入响应
+            response.getOutputStream().write(bytes);
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            log.error("file download error, filepath = " + filepath, e);
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "下载失败");
+        } finally {
+            if (cosObjectInput != null) {
+                cosObjectInput.close();
+            }
+        }
+    }
 
     /**
      * 文件上传
@@ -50,7 +110,7 @@ public class FileController {
      */
     @PostMapping("/upload")
     public BaseResponse<String> uploadFile(@RequestPart("file") MultipartFile multipartFile,
-            UploadFileRequest uploadFileRequest, HttpServletRequest request) {
+                                           UploadFileRequest uploadFileRequest, HttpServletRequest request) {
         String biz = uploadFileRequest.getBiz();
         FileUploadBizEnum fileUploadBizEnum = FileUploadBizEnum.getEnumByValue(biz);
         if (fileUploadBizEnum == null) {
@@ -69,7 +129,7 @@ public class FileController {
             multipartFile.transferTo(file);
             cosManager.putObject(filepath, file);
             // 返回可访问地址
-            return ResultUtils.success(FileConstant.COS_HOST + filepath);
+            return ResultUtils.success(filepath);
         } catch (Exception e) {
             log.error("file upload error, filepath = " + filepath, e);
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
@@ -105,4 +165,5 @@ public class FileController {
             }
         }
     }
-}
+
+    }
